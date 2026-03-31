@@ -62,7 +62,7 @@ export default function LibraryPage() {
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-4 border-b border-white/60 bg-white/40 backdrop-blur-sm">
         <button
-          onClick={() => signOut({ callbackUrl: '/' })}
+          onClick={() => signOut({ callbackUrl: '/tales-and-choices' })}
           className="flex items-center gap-1.5 text-sm font-semibold px-3 py-2 rounded-xl hover:bg-white/60 transition-colors"
           style={{ color: '#9b9bb0' }}
         >
