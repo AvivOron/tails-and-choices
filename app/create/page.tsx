@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Wand2, Plus, X } from 'lucide-react';
+import { Wand2, Plus, X, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const SETTINGS = [
@@ -93,6 +93,17 @@ export default function CreatePage() {
         animate={{ opacity: 1, y: 0 }}
         className="max-w-lg mx-auto"
       >
+        <div className="mb-4">
+          <button
+            onClick={() => router.push('/library')}
+            className="flex items-center gap-1 text-sm font-semibold px-3 py-1.5 rounded-xl transition-colors"
+            style={{ color: '#9b9bb0' }}
+          >
+            <ArrowRight className="w-4 h-4" />
+            הספרייה שלי
+          </button>
+        </div>
+
         <div className="text-center mb-8">
           <div
             className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md"
