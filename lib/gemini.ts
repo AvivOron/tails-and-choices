@@ -60,9 +60,9 @@ ${companionsRule}
   const result = await model.generateContent(prompt);
   const text = result.response.text().trim();
 
-  // Strip markdown code blocks if present
-  const jsonText = text.replace(/^```json?\s*/i, '').replace(/\s*```$/, '').trim();
-
-  const parsed = JSON.parse(jsonText) as GeminiChapterResponse;
+  // Extract JSON object from response, stripping any markdown or surrounding text
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) throw new Error('No JSON found in Gemini response');
+  const parsed = JSON.parse(jsonMatch[0]) as GeminiChapterResponse;
   return parsed;
 }
