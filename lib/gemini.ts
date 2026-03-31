@@ -47,13 +47,13 @@ RULES:
 ${companionsRule}
 4. IMPORTANT: If a choice was made, the chapter MUST open by directly continuing from that choice — describe what happens as a result of it. Do not ignore the choice.
 5. Each chapter should be 20-25 sentences long, telling a rich and detailed mini-scene with a clear beginning, middle, and end. Include descriptions of the surroundings, the characters' feelings, dialogue between characters, and small adventures or discoveries along the way.
-6. End the chapter with a moment of suspense or decision that leads naturally to two choices.
-7. The two choices should be meaningfully different and lead the story in different directions.
+6. End the chapter with a decision point — NOT a question. The hero must choose between two actions.
+7. optionA and optionB are ACTIONS written in second-person imperative Hebrew (e.g. "תרוץ ליער", "תקרא לעזרה", "תיקח את הביצה"). Never use infinitive form (לרוץ, לקחת). Never write them as answers to a question.
 8. Format: Return ONLY a valid JSON object with no markdown, no code blocks, just raw JSON:
 {
   "chapterText": "20-25 sentences in Hebrew",
-  "optionA": "Short Hebrew choice (2-4 words)",
-  "optionB": "Short Hebrew choice (2-4 words)",
+  "optionA": "Action the hero can take (2-4 words, starts with a verb)",
+  "optionB": "Different action the hero can take (2-4 words, starts with a verb)",
   "newSummary": "A 1-2 sentence English summary of the entire plot so far including this new chapter"
 }`;
 
