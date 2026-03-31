@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   basePath: '/tales-and-choices',
   experimental: {
     serverActions: {
-      allowedOrigins: ["localhost:3000"],
+      allowedOrigins: ["localhost:3000", "www.avivo.dev"],
     },
   },
 };
