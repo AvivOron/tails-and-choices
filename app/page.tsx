@@ -1,6 +1,6 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { BookOpen, Sparkles } from 'lucide-react';
@@ -52,7 +52,7 @@ export default function HomePage() {
         </p>
 
         <button
-          onClick={() => window.location.href = '/tales-and-choices/api/auth/signin/google'}
+          onClick={() => signIn('google')}
           className="w-full py-4 px-8 rounded-2xl text-xl font-bold text-white shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 flex items-center justify-center gap-3 cursor-pointer"
           style={{ background: 'linear-gradient(135deg, #FFCF81, #ffb74d)' }}
         >
