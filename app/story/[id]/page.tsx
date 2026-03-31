@@ -78,7 +78,7 @@ export default function StoryPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: 'linear-gradient(135deg, #fff9ed 0%, #f0ebff 100%)' }}>
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: 'linear-gradient(135deg, #f5e6c8 0%, #e8dff5 100%)' }}>
         <div className="text-5xl animate-bounce">📖</div>
         <p className="text-lg font-semibold" style={{ color: '#9b9bb0' }}>
           {loading ? 'טוענים את הסיפור...' : ''}
@@ -89,7 +89,7 @@ export default function StoryPage() {
 
   if (error && !currentChapter) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #fff9ed 0%, #f0ebff 100%)' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #f5e6c8 0%, #e8dff5 100%)' }}>
         <div className="text-center">
           <p className="text-xl font-bold text-red-400 mb-4">{error}</p>
           <button onClick={() => router.push('/library')} className="text-purple-500 underline">
@@ -101,7 +101,7 @@ export default function StoryPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(135deg, #fff9ed 0%, #f0ebff 100%)' }}>
+    <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(135deg, #f5e6c8 0%, #e8dff5 100%)' }}>
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-4 border-b border-white/60 bg-white/40 backdrop-blur-sm">
         <button
@@ -167,7 +167,7 @@ export default function StoryPage() {
               {currentChapter.option_a && currentChapter.option_b && (
                 <div className="space-y-3">
                   <p className="text-center font-bold text-lg mb-4" style={{ color: '#6b6b8a' }}>
-                    מה יעשה {story?.hero_name}?
+                    {story?.hero_gender === 'female' ? 'מה תעשה' : 'מה יעשה'} {story?.hero_name}?
                   </p>
                   <motion.button
                     whileHover={{ scale: 1.02 }}

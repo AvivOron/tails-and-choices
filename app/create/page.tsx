@@ -24,6 +24,7 @@ export default function CreatePage() {
   const [companionInput, setCompanionInput] = useState('');
   const [companions, setCompanions] = useState<string[]>([]);
   const [setting, setSetting] = useState('forest');
+  const [customSetting, setCustomSetting] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -50,6 +51,10 @@ export default function CreatePage() {
       setError('נא להזין שם לגיבור/ה');
       return;
     }
+    if (setting === 'custom' && !customSetting.trim()) {
+      setError('נא להזין מיקום מותאם אישית');
+      return;
+    }
     setLoading(true);
     setError('');
 
@@ -61,7 +66,7 @@ export default function CreatePage() {
           heroName: heroName.trim(),
           heroGender,
           companionNames: companions,
-          setting,
+          setting: setting === 'custom' ? customSetting.trim() : setting,
         }),
       });
 
@@ -81,7 +86,7 @@ export default function CreatePage() {
   return (
     <div
       className="min-h-screen px-4 py-10"
-      style={{ background: 'linear-gradient(135deg, #fff9ed 0%, #f0ebff 100%)' }}
+      style={{ background: 'linear-gradient(135deg, #f5e6c8 0%, #e8dff5 100%)' }}
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -215,7 +220,31 @@ export default function CreatePage() {
                   {s.label}
                 </button>
               ))}
+              <button
+                type="button"
+                onClick={() => setSetting('custom')}
+                className="py-3 px-2 rounded-2xl text-sm font-semibold transition-all duration-200 text-center"
+                style={{
+                  background: setting === 'custom' ? 'linear-gradient(135deg, #FFCF81, #ffb74d)' : '#f3f4f6',
+                  color: setting === 'custom' ? 'white' : '#6b7280',
+                  boxShadow: setting === 'custom' ? '0 4px 12px rgba(255,183,77,0.3)' : 'none',
+                }}
+              >
+                ✏️ אחר...
+              </button>
             </div>
+            {setting === 'custom' && (
+              <input
+                type="text"
+                value={customSetting}
+                onChange={(e) => setCustomSetting(e.target.value)}
+                placeholder="לדוגמה: ממלכת הקרח, פארק שעשועים..."
+                className="mt-3 w-full border-2 rounded-2xl px-4 py-3 text-base focus:outline-none transition-colors"
+                style={{ borderColor: customSetting ? '#FFCF81' : '#e5e7eb', textAlign: 'right' }}
+                dir="rtl"
+                autoFocus
+              />
+            )}
           </div>
 
           {error && (

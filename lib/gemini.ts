@@ -24,10 +24,13 @@ export async function generateChapter({
   rollingSummary: string;
   choiceMade?: string;
 }): Promise<GeminiChapterResponse> {
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' });
 
   const genderHebrew = heroGender === 'male' ? 'זכר' : 'נקבה';
-  const companionsStr = companionNames.length > 0 ? companionNames.join(', ') : 'אין חברים';
+  const companionsStr = companionNames.length > 0 ? companionNames.join(', ') : 'none';
+  const companionsRule = companionNames.length > 0
+    ? `3. MANDATORY FRIENDS RULE: The friends (${companionsStr}) MUST appear by name in the chapter and have spoken dialogue. They must DO something — help, react, discover, or speak. Do not just mention them in passing.`
+    : '3. No friends in this story.';
   const choiceContext = choiceMade ? `\n- Choice Made: The hero chose: "${choiceMade}"` : '';
 
   const prompt = `You are a warm, imaginative Hebrew storyteller for toddlers (ages 3-5).
@@ -39,17 +42,19 @@ CONTEXT:
 - Past Events: ${rollingSummary || 'This is the very beginning of the story.'}${choiceContext}
 
 RULES:
-1. Language: Simple, rhythmic Hebrew (עברית לגיל הרך). Short sentences.
+1. Language: Simple, rhythmic Hebrew (עברית לגיל הרך). Short sentences, easy words.
 2. Grammar: Strict gender agreement for ${genderHebrew}.
-3. The story should be warm, magical, and appropriate for ages 3-5.
-4. Each chapter should be 3-4 short sentences.
-5. End with a moment that leads naturally to two choices.
-6. Format: Return ONLY a valid JSON object with no markdown, no code blocks, just raw JSON:
+${companionsRule}
+4. IMPORTANT: If a choice was made, the chapter MUST open by directly continuing from that choice — describe what happens as a result of it. Do not ignore the choice.
+5. Each chapter should be 20-25 sentences long, telling a rich and detailed mini-scene with a clear beginning, middle, and end. Include descriptions of the surroundings, the characters' feelings, dialogue between characters, and small adventures or discoveries along the way.
+6. End the chapter with a moment of suspense or decision that leads naturally to two choices.
+7. The two choices should be meaningfully different and lead the story in different directions.
+8. Format: Return ONLY a valid JSON object with no markdown, no code blocks, just raw JSON:
 {
-  "chapterText": "3-4 sentences in Hebrew",
+  "chapterText": "20-25 sentences in Hebrew",
   "optionA": "Short Hebrew choice (2-4 words)",
   "optionB": "Short Hebrew choice (2-4 words)",
-  "newSummary": "A 1-sentence English summary of the entire plot so far including this new chapter"
+  "newSummary": "A 1-2 sentence English summary of the entire plot so far including this new chapter"
 }`;
 
   const result = await model.generateContent(prompt);

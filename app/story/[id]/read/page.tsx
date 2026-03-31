@@ -45,14 +45,14 @@ export default function ReadPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #fff9ed 0%, #f0ebff 100%)' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #f5e6c8 0%, #e8dff5 100%)' }}>
         <div className="text-5xl animate-bounce">📖</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #fff9ed 0%, #f0ebff 100%)' }}>
+    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #f5e6c8 0%, #e8dff5 100%)' }}>
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-4 border-b border-white/60 bg-white/40 backdrop-blur-sm sticky top-0 z-10">
         <button
@@ -103,7 +103,7 @@ export default function ReadPage() {
             {chapter.choice_made && (
               <div
                 className="mt-4 px-4 py-2 rounded-xl text-sm font-semibold text-right"
-                style={{ background: 'linear-gradient(135deg, #fff9ed, #f0ebff)', color: '#9b9bb0', direction: 'rtl' }}
+                style={{ background: 'linear-gradient(135deg, #f5e6c8, #e8dff5)', color: '#9b9bb0', direction: 'rtl' }}
               >
                 ✅ {story?.hero_name} בחר{story?.hero_gender === 'female' ? 'ה' : ''}: {chapter.choice_made}
               </div>

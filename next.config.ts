@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  basePath: '/tales-and-choices',
   experimental: {
     serverActions: {
       allowedOrigins: ["localhost:3000"],

@@ -17,7 +17,7 @@ export default function HomePage() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #fff9ed 0%, #f0ebff 100%)' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #f5e6c8 0%, #e8dff5 100%)' }}>
         <div className="text-4xl animate-bounce">✨</div>
       </div>
     );
@@ -26,7 +26,7 @@ export default function HomePage() {
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center px-6 text-center relative overflow-hidden"
-      style={{ background: 'linear-gradient(135deg, #fff9ed 0%, #f0ebff 100%)' }}
+      style={{ background: 'linear-gradient(135deg, #f5e6c8 0%, #e8dff5 100%)' }}
     >
       <div className="absolute top-8 left-8 text-4xl opacity-40 animate-pulse">⭐</div>
       <div className="absolute top-16 right-12 text-3xl opacity-40 animate-pulse" style={{ animationDelay: '0.5s' }}>🌙</div>
