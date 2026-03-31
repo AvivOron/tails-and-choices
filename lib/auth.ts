@@ -17,6 +17,6 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages: {
-    signIn: '/',
+    signIn: '/tales-and-choices',
   },
 };
