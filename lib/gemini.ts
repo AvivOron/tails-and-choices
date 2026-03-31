@@ -24,7 +24,7 @@ export async function generateChapter({
   rollingSummary: string;
   choiceMade?: string;
 }): Promise<GeminiChapterResponse> {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
   const genderHebrew = heroGender === 'male' ? 'זכר' : 'נקבה';
   const companionsStr = companionNames.length > 0 ? companionNames.join(', ') : 'none';
@@ -47,8 +47,8 @@ RULES:
 ${companionsRule}
 4. IMPORTANT: If a choice was made, the chapter MUST open by directly continuing from that choice — describe what happens as a result of it. Do not ignore the choice.
 5. Each chapter should be 20-25 sentences long, telling a rich and detailed mini-scene with a clear beginning, middle, and end. Include descriptions of the surroundings, the characters' feelings, dialogue between characters, and small adventures or discoveries along the way.
-6. End the chapter with a decision point — NOT a question. The hero must choose between two actions.
-7. optionA and optionB are ACTIONS written in second-person imperative Hebrew (e.g. "תרוץ ליער", "תקרא לעזרה", "תיקח את הביצה"). Never use infinitive form (לרוץ, לקחת). Never write them as answers to a question.
+6. End the chapter with a narrative sentence describing the decision moment. Do NOT end with a question (no "?"). Do NOT write "מה תעשה" or any question form.
+7. optionA and optionB MUST be in second-person imperative Hebrew conjugated for ${genderHebrew}: male examples: "תפתח את הארגז", "תרוץ ליער" — female examples: "תפתחי את הארגז", "תרוצי ליער". NEVER use infinitive (לפתוח, לרוץ). NEVER phrase as an answer to a question.
 8. Format: Return ONLY a valid JSON object with no markdown, no code blocks, just raw JSON:
 {
   "chapterText": "20-25 sentences in Hebrew",
