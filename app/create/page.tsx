@@ -59,7 +59,7 @@ export default function CreatePage() {
     setError('');
 
     try {
-      const res = await fetch('/api/stories', {
+      const res = await fetch('/tales-and-choices/api/stories', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

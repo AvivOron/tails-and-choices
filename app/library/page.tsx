@@ -31,7 +31,7 @@ export default function LibraryPage() {
       return;
     }
     if (status === 'authenticated') {
-      fetch('/api/stories')
+      fetch('/tales-and-choices/api/stories')
         .then((r) => r.json())
         .then((d) => setStories(d.stories ?? []))
         .finally(() => setLoading(false));
@@ -41,7 +41,7 @@ export default function LibraryPage() {
   async function handleDelete(storyId: string) {
     setDeletingId(storyId);
     try {
-      await fetch(`/api/stories/${storyId}`, { method: 'DELETE' });
+      await fetch(`/tales-and-choices/api/stories/${storyId}`, { method: 'DELETE' });
       setStories((prev) => prev.filter((s) => s.id !== storyId));
     } finally {
       setDeletingId(null);

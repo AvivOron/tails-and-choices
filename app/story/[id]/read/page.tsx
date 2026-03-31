@@ -19,7 +19,7 @@ export default function ReadPage() {
 
   const fetchStory = useCallback(async () => {
     try {
-      const res = await fetch(`/api/stories/${storyId}`);
+      const res = await fetch(`/tales-and-choices/api/stories/${storyId}`);
       if (!res.ok) throw new Error();
       const data = await res.json();
       setStory(data.story);

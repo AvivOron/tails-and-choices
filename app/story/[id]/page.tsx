@@ -23,7 +23,7 @@ export default function StoryPage() {
 
   const fetchStory = useCallback(async () => {
     try {
-      const res = await fetch(`/api/stories/${storyId}`);
+      const res = await fetch(`/tales-and-choices/api/stories/${storyId}`);
       if (!res.ok) throw new Error('Story not found');
       const data = await res.json();
       setStory(data.story);
@@ -51,7 +51,7 @@ export default function StoryPage() {
     setError('');
 
     try {
-      const res = await fetch(`/api/stories/${storyId}/chapters`, {
+      const res = await fetch(`/tales-and-choices/api/stories/${storyId}/chapters`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ choiceMade: choice }),
