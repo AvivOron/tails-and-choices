@@ -107,7 +107,7 @@ export default function StoryPage() {
       <div className="flex items-center justify-between px-4 py-4 border-b border-white/60 bg-white/40 backdrop-blur-sm">
         <button
           onClick={() => router.push('/library')}
-          className={`flex items-center gap-1.5 text-sm font-semibold px-3 py-2 rounded-xl transition-colors hover:bg-white/60 ${choosing ? 'invisible' : ''}`}
+          className="flex items-center gap-1.5 text-sm font-semibold px-3 py-2 rounded-xl transition-colors hover:bg-white/60"
           style={{ color: '#B2A4FF' }}
         >
           <Library className="w-4 h-4" />
@@ -125,7 +125,7 @@ export default function StoryPage() {
 
         <button
           onClick={() => router.push('/create')}
-          className={`flex items-center gap-1.5 text-sm font-semibold px-3 py-2 rounded-xl transition-colors hover:bg-white/60 ${choosing ? 'invisible' : ''}`}
+          className="flex items-center gap-1.5 text-sm font-semibold px-3 py-2 rounded-xl transition-colors hover:bg-white/60"
           style={{ color: '#FFCF81' }}
         >
           <Plus className="w-4 h-4" />
