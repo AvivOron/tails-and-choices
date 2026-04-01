@@ -5,6 +5,10 @@ export const alt = 'סיפורים ובחירות | Tales & Choices';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
+function rtl(text: string) {
+  return text.split('').reverse().join('');
+}
+
 async function loadHeeboFont() {
   const css = await fetch(
     'https://fonts.googleapis.com/css2?family=Heebo:wght@400;800&subset=hebrew',
@@ -64,11 +68,11 @@ export default async function OGImage() {
         <div style={{ fontSize: 72, fontWeight: 800, color: '#2d2d2d', marginBottom: 16 }}>
           Tales &amp; Choices
         </div>
-        <div style={{ fontSize: 36, color: '#6b6b8a', marginBottom: 12, direction: 'rtl' }}>
-          סיפורים אינטראקטיביים לילדים
+        <div style={{ fontSize: 36, color: '#6b6b8a', marginBottom: 12 }}>
+          {rtl('סיפורים אינטראקטיביים לילדים')}
         </div>
-        <div style={{ fontSize: 28, color: '#9b9bb0', direction: 'rtl' }}>
-          צרו סיפורים קסומים עם הגיבור שלכם
+        <div style={{ fontSize: 28, color: '#9b9bb0' }}>
+          {rtl('צרו סיפורים קסומים עם הגיבור שלכם')}
         </div>
       </div>
     ),
