@@ -100,6 +100,14 @@ export default function ReadPage() {
               {chapter.content}
             </p>
 
+            {chapter.image_url && (
+              <img
+                src={chapter.image_url}
+                alt={`איור פרק ${chapter.chapter_number}`}
+                className="w-full rounded-2xl mt-4 object-cover"
+              />
+            )}
+
             {chapter.choice_made && (
               <div
                 className="mt-4 px-4 py-2 rounded-xl text-sm font-semibold text-right"
