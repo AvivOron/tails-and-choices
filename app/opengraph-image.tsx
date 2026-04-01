@@ -9,29 +9,7 @@ function rtl(text: string) {
   return text.split('').reverse().join('');
 }
 
-async function loadHeeboFont(): Promise<ArrayBuffer | null> {
-  try {
-    const css = await fetch(
-      'https://fonts.googleapis.com/css2?family=Heebo:wght@400;800&subset=hebrew',
-      {
-        headers: {
-          'User-Agent':
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        },
-      }
-    ).then((r) => r.text());
-
-    const url = css.match(/src: url\(([^)]+)\) format\('woff2'\)/)?.[1];
-    if (!url) return null;
-    return fetch(url).then((r) => r.arrayBuffer());
-  } catch {
-    return null;
-  }
-}
-
-export default async function OGImage() {
-  const heeboData = await loadHeeboFont();
-
+export default function OGImage() {
   return new ImageResponse(
     (
       <div
@@ -43,7 +21,7 @@ export default async function OGImage() {
           alignItems: 'center',
           justifyContent: 'center',
           background: 'linear-gradient(135deg, #f5e6c8 0%, #e8dff5 100%)',
-          fontFamily: 'Heebo, sans-serif',
+          fontFamily: 'sans-serif',
         }}
       >
         {/* decorative stars */}
@@ -80,11 +58,6 @@ export default async function OGImage() {
         </div>
       </div>
     ),
-    {
-      ...size,
-      ...(heeboData && {
-        fonts: [{ name: 'Heebo', data: heeboData, style: 'normal', weight: 400 }],
-      }),
-    }
+    { ...size }
   );
 }
