@@ -39,6 +39,24 @@ export type Database = {
         };
         Relationships: [];
       };
+      users: {
+        Row: {
+          id: string;
+          email: string;
+          created_at: string;
+        };
+        Insert: {
+          id: string;
+          email: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          email?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       chapters: {
         Row: {
           id: string;
