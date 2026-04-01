@@ -10,9 +10,39 @@ const heebo = Heebo({
   display: 'swap',
 });
 
+const baseUrl = 'https://www.avivo.dev/tales-and-choices';
+
 export const metadata: Metadata = {
-  title: 'Tales & Choices',
-  description: 'Interactive Hebrew storytelling for toddlers',
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: 'סיפורים ובחירות | Tales & Choices',
+    template: '%s | סיפורים ובחירות',
+  },
+  description: 'אפליקציית סיפורים אינטראקטיביים בעברית לילדים קטנים. צרו סיפור ייחודי עם הגיבור שלכם ובחרו את המסע! Interactive Hebrew storytelling for toddlers.',
+  keywords: ['סיפורים לילדים', 'עברית', 'סיפור אינטראקטיבי', 'ילדים', 'Hebrew stories for kids', 'interactive storytelling', 'toddlers'],
+  authors: [{ name: 'Aviv Oron', url: 'https://www.avivo.dev' }],
+  creator: 'Aviv Oron',
+  openGraph: {
+    type: 'website',
+    url: baseUrl,
+    siteName: 'סיפורים ובחירות',
+    title: 'סיפורים ובחירות | Tales & Choices',
+    description: 'אפליקציית סיפורים אינטראקטיביים בעברית לילדים קטנים. צרו סיפור ייחודי עם הגיבור שלכם ובחרו את המסע!',
+    locale: 'he_IL',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'סיפורים ובחירות | Tales & Choices',
+    description: 'אפליקציית סיפורים אינטראקטיביים בעברית לילדים קטנים.',
+  },
+  alternates: {
+    canonical: baseUrl,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
