@@ -76,7 +76,7 @@ export async function generateChapterImage({
   setting: string;
   rollingSummary: string;
 }): Promise<string> {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-preview-image-generation' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-image' });
 
   const prompt = `Create a colorful, warm, child-friendly picture book illustration.
 Hero: ${heroName}
@@ -85,7 +85,7 @@ Story so far: ${rollingSummary}
 Style: soft watercolor, bright and cheerful, suitable for children ages 3-5, no text in the image, storybook art.`;
 
   const generationConfig: GenerationConfig & { responseModalities: string[] } = {
-    responseModalities: ['IMAGE'],
+    responseModalities: ['TEXT', 'IMAGE'],
   };
 
   const result = await model.generateContent({
