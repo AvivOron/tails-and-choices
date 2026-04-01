@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Heebo } from 'next/font/google';
 import './globals.css';
 import SessionProvider from '@/components/SessionProvider';
+import { Analytics } from '@vercel/analytics/next';
 
 const heebo = Heebo({
   subsets: ['hebrew', 'latin'],
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="he" dir="rtl" className={`${heebo.variable} h-full`}>
       <body className="min-h-full flex flex-col font-[var(--font-heebo)]" style={{ fontFamily: 'var(--font-heebo), Arial, sans-serif' }}>
         <SessionProvider>{children}</SessionProvider>
+        <Analytics />
       </body>
     </html>
   );
