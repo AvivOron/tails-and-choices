@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { createServiceClient } from '@/lib/supabase';
 import { generateChapter } from '@/lib/gemini';
+import { getDailyChapterCount, DAILY_CHAPTER_LIMIT } from '@/lib/rateLimit';
 
 // POST /api/stories — create new story + generate chapter 1
 export async function POST(req: NextRequest) {
@@ -19,6 +20,12 @@ export async function POST(req: NextRequest) {
   }
 
   const supabase = createServiceClient();
+
+  // Check daily chapter limit (chapter 1 counts too)
+  const todayCount = await getDailyChapterCount(userId, supabase);
+  if (todayCount >= DAILY_CHAPTER_LIMIT) {
+    return NextResponse.json({ error: 'Daily chapter limit reached' }, { status: 429 });
+  }
 
   // Generate first chapter
   const chapter = await generateChapter({
