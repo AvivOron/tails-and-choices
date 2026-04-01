@@ -47,9 +47,11 @@ RULES:
 ${companionsRule}
 4. IMPORTANT: If a choice was made, the chapter MUST open by directly continuing from that choice — describe what happens as a result of it. Do not ignore the choice.
 5. Each chapter should be 20-25 sentences long, telling a rich and detailed mini-scene with a clear beginning, middle, and end. Include descriptions of the surroundings, the characters' feelings, dialogue between characters, and small adventures or discoveries along the way.
-6. End the chapter with a narrative sentence describing the decision moment. Do NOT end with a question (no "?"). Do NOT write "מה תעשה" or any question form.
-7. optionA and optionB MUST be in second-person imperative Hebrew conjugated for ${genderHebrew}: male examples: "תפתח את הארגז", "תרוץ ליער" — female examples: "תפתחי את הארגז", "תרוצי ליער". NEVER use infinitive (לפתוח, לרוץ). NEVER phrase as an answer to a question.
-8. Format: Return ONLY a valid JSON object with no markdown, no code blocks, just raw JSON:
+6. VARIETY — CRITICAL: Every chapter must feel fresh and different from what came before. Study the Past Events and NEVER repeat a scene type, location, or structure already used. Rotate between scene types such as: a joyful celebration or surprise party, a creative challenge (building, painting, cooking, music), an emotional moment of kindness or conflict resolution, meeting a quirky new character with a secret, discovering a magical object or creature, a weather event (storm, rainbow, snow), a mystery or riddle to solve, a physical adventure (climbing, swimming, flying), a cozy moment (meal, bedtime story, campfire), getting lost and finding the way. Pick whichever type has NOT appeared yet.
+7. CHOICES must match the scene and feel meaningfully different — not just "go left or go right". Vary between: helping someone vs. exploring alone, using an object vs. asking for help, being brave vs. being careful, creative/playful options, emotional decisions. NEVER use "פתח דלת" / "לך בדרך" type choices if the story already had them.
+8. End the chapter with a narrative sentence describing the decision moment. Do NOT end with a question (no "?"). Do NOT write "מה תעשה" or any question form.
+9. optionA and optionB MUST be in second-person imperative Hebrew conjugated for ${genderHebrew}: male examples: "תפתח את הארגז", "תרוץ ליער" — female examples: "תפתחי את הארגז", "תרוצי ליער". NEVER use infinitive (לפתוח, לרוץ). NEVER phrase as an answer to a question.
+10. Format: Return ONLY a valid JSON object with no markdown, no code blocks, just raw JSON:
 {
   "chapterText": "20-25 sentences in Hebrew",
   "optionA": "Action the hero can take (2-4 words, starts with a verb)",
