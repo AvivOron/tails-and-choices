@@ -325,6 +325,24 @@ export default function StoryPage() {
               transition={{ duration: 0.4, ease: 'easeOut' }}
               className="w-full"
             >
+              {/* Daily limit banner */}
+              {limitReached && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-white rounded-2xl p-6 text-center shadow-lg mb-6"
+                  style={{ direction: 'rtl' }}
+                >
+                  <div className="text-4xl mb-3">🌙</div>
+                  <p className="font-bold text-lg mb-1" style={{ color: '#6b6b8a' }}>
+                    הגעתם ל-15 פרקים להיום!
+                  </p>
+                  <p className="text-sm" style={{ color: '#9b9bb0' }}>
+                    חזרו מחר להמשך ההרפתקה ✨
+                  </p>
+                </motion.div>
+              )}
+
               {/* Chapter text */}
               <div className="bg-white rounded-3xl shadow-xl p-8 mb-6 relative">
                 <div className="absolute top-4 left-4 text-2xl opacity-30">📖</div>
@@ -367,50 +385,31 @@ export default function StoryPage() {
               )}
 
               {/* Choices */}
-              {currentChapter.option_a && currentChapter.option_b && (
+              {currentChapter.option_a && currentChapter.option_b && !limitReached && (
                 <div className="space-y-3">
-                  {limitReached ? (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="bg-white rounded-2xl p-6 text-center shadow-lg"
-                      style={{ direction: 'rtl' }}
-                    >
-                      <div className="text-4xl mb-3">🌙</div>
-                      <p className="font-bold text-lg mb-1" style={{ color: '#6b6b8a' }}>
-                        הגעתם ל-15 פרקים להיום!
-                      </p>
-                      <p className="text-sm" style={{ color: '#9b9bb0' }}>
-                        חזרו מחר להמשך ההרפתקה ✨
-                      </p>
-                    </motion.div>
-                  ) : (
-                    <>
-                      <p className="text-center font-bold text-lg mb-4" style={{ color: '#6b6b8a' }}>
-                        {story?.hero_gender === 'female' ? 'מה תעשי' : 'מה יעשה'} {story?.hero_name}?
-                      </p>
-                      <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.97 }}
-                        onClick={() => handleChoice(currentChapter.option_a!)}
-                        disabled={choosing}
-                        className="w-full py-5 px-6 rounded-2xl text-xl font-bold text-white shadow-lg disabled:opacity-60 text-right"
-                        style={{ background: 'linear-gradient(135deg, #FFCF81, #ffb74d)', direction: 'rtl' }}
-                      >
-                        {`👉 ${currentChapter.option_a}`}
-                      </motion.button>
-                      <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.97 }}
-                        onClick={() => handleChoice(currentChapter.option_b!)}
-                        disabled={choosing}
-                        className="w-full py-5 px-6 rounded-2xl text-xl font-bold text-white shadow-lg disabled:opacity-60 text-right"
-                        style={{ background: 'linear-gradient(135deg, #B2A4FF, #9c88ff)', direction: 'rtl' }}
-                      >
-                        {`👉 ${currentChapter.option_b}`}
-                      </motion.button>
-                    </>
-                  )}
+                  <p className="text-center font-bold text-lg mb-4" style={{ color: '#6b6b8a' }}>
+                    {story?.hero_gender === 'female' ? 'מה תעשי' : 'מה יעשה'} {story?.hero_name}?
+                  </p>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => handleChoice(currentChapter.option_a!)}
+                    disabled={choosing}
+                    className="w-full py-5 px-6 rounded-2xl text-xl font-bold text-white shadow-lg disabled:opacity-60 text-right"
+                    style={{ background: 'linear-gradient(135deg, #FFCF81, #ffb74d)', direction: 'rtl' }}
+                  >
+                    {`👉 ${currentChapter.option_a}`}
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => handleChoice(currentChapter.option_b!)}
+                    disabled={choosing}
+                    className="w-full py-5 px-6 rounded-2xl text-xl font-bold text-white shadow-lg disabled:opacity-60 text-right"
+                    style={{ background: 'linear-gradient(135deg, #B2A4FF, #9c88ff)', direction: 'rtl' }}
+                  >
+                    {`👉 ${currentChapter.option_b}`}
+                  </motion.button>
                 </div>
               )}
 
