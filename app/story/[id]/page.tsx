@@ -49,7 +49,7 @@ export default function StoryPage() {
     if (choosing) return;
     setChoosing(true);
     setError('');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo(0, 0);
 
     try {
       const res = await fetch(`/tales-and-choices/api/stories/${storyId}/chapters`, {
