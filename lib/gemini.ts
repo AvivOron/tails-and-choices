@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI, type GenerationConfig } from '@google/generative-ai';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
@@ -65,4 +65,40 @@ ${companionsRule}
   if (!jsonMatch) throw new Error('No JSON found in Gemini response');
   const parsed = JSON.parse(jsonMatch[0]) as GeminiChapterResponse;
   return parsed;
+}
+
+export async function generateChapterImage({
+  heroName,
+  setting,
+  rollingSummary,
+}: {
+  heroName: string;
+  setting: string;
+  rollingSummary: string;
+}): Promise<string> {
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+
+  const prompt = `Create a colorful, warm, child-friendly picture book illustration.
+Hero: ${heroName}
+Setting: ${setting}
+Story so far: ${rollingSummary}
+Style: soft watercolor, bright and cheerful, suitable for children ages 3-5, no text in the image, storybook art.`;
+
+  const generationConfig: GenerationConfig & { responseModalities: string[] } = {
+    responseModalities: ['IMAGE'],
+  };
+
+  const result = await model.generateContent({
+    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+    generationConfig,
+  });
+
+  const parts = result.response.candidates?.[0]?.content?.parts ?? [];
+  for (const part of parts) {
+    if (part.inlineData) {
+      return `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+    }
+  }
+
+  throw new Error('No image in Gemini response');
 }

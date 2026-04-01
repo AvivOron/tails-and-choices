@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter, useParams } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -19,6 +19,8 @@ export default function StoryPage() {
   const [choosing, setChoosing] = useState(false);
   const [error, setError] = useState('');
   const [lastChoice, setLastChoice] = useState<string | null>(null);
+  const [chapterImages, setChapterImages] = useState<Record<string, string>>({});
+  const generatingImagesRef = useRef<Set<string>>(new Set());
 
   const currentChapter = chapters[chapters.length - 1];
 
@@ -45,6 +47,47 @@ export default function StoryPage() {
       fetchStory();
     }
   }, [status, router, fetchStory]);
+
+  useEffect(() => {
+    if (!currentChapter?.id || !storyId) return;
+
+    // If chapter already has an image from DB, use it
+    if (currentChapter.image_url) {
+      setChapterImages((prev) => ({ ...prev, [currentChapter.id]: currentChapter.image_url! }));
+      return;
+    }
+
+    // Avoid duplicate requests
+    if (generatingImagesRef.current.has(currentChapter.id)) return;
+    generatingImagesRef.current.add(currentChapter.id);
+
+    // Mark as loading (empty string = loading, string = done)
+    setChapterImages((prev) => ({ ...prev, [currentChapter.id]: '' }));
+
+    fetch(`/tales-and-choices/api/stories/${storyId}/chapters/${currentChapter.id}/image`, {
+      method: 'POST',
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.imageUrl) {
+          setChapterImages((prev) => ({ ...prev, [currentChapter.id]: data.imageUrl }));
+        } else {
+          setChapterImages((prev) => {
+            const next = { ...prev };
+            delete next[currentChapter.id];
+            return next;
+          });
+        }
+      })
+      .catch(() => {
+        generatingImagesRef.current.delete(currentChapter.id);
+        setChapterImages((prev) => {
+          const next = { ...prev };
+          delete next[currentChapter.id];
+          return next;
+        });
+      });
+  }, [currentChapter?.id, currentChapter?.image_url, storyId]);
 
   async function handleChoice(choice: string) {
     if (choosing) return;
@@ -295,6 +338,28 @@ export default function StoryPage() {
                   קראו לי בקול
                 </button>
               </div>
+
+              {/* Chapter illustration (async) */}
+              {currentChapter.id in chapterImages && (
+                <div className="mt-6">
+                  {chapterImages[currentChapter.id] ? (
+                    <motion.img
+                      key={currentChapter.id}
+                      src={chapterImages[currentChapter.id]}
+                      alt="איור לפרק"
+                      className="w-full rounded-2xl shadow-md"
+                      initial={{ opacity: 0, scale: 0.97 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.5, ease: 'easeOut' }}
+                    />
+                  ) : (
+                    <div
+                      className="w-full h-48 rounded-2xl animate-pulse"
+                      style={{ background: 'linear-gradient(135deg, #e8dff5 0%, #f5e6c8 100%)' }}
+                    />
+                  )}
+                </div>
+              )}
 
               {/* Choices */}
               {currentChapter.option_a && currentChapter.option_b && (
