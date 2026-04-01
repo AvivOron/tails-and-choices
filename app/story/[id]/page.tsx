@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter, useParams } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -18,6 +18,7 @@ export default function StoryPage() {
   const [loading, setLoading] = useState(true);
   const [choosing, setChoosing] = useState(false);
   const [error, setError] = useState('');
+  const pageTopRef = useRef<HTMLDivElement>(null);
 
   const currentChapter = chapters[chapters.length - 1];
 
@@ -49,6 +50,7 @@ export default function StoryPage() {
     if (choosing) return;
     setChoosing(true);
     setError('');
+    pageTopRef.current?.scrollIntoView({ behavior: 'smooth' });
 
     try {
       const res = await fetch(`/tales-and-choices/api/stories/${storyId}/chapters`, {
@@ -102,6 +104,7 @@ export default function StoryPage() {
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(135deg, #f5e6c8 0%, #e8dff5 100%)' }}>
+      <div ref={pageTopRef} />
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-4 border-b border-white/60 bg-white/40 backdrop-blur-sm">
         <button
@@ -135,7 +138,36 @@ export default function StoryPage() {
       {/* Chapter content */}
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 max-w-2xl mx-auto w-full">
         <AnimatePresence mode="wait">
-          {currentChapter && (
+          {choosing ? (
+            <motion.div
+              key="skeleton"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="w-full"
+            >
+              {/* Skeleton chapter text */}
+              <div className="bg-white rounded-3xl shadow-xl p-8 mb-6 relative">
+                <div className="absolute top-4 left-4 text-2xl opacity-30">📖</div>
+                <div className="space-y-3 animate-pulse">
+                  <div className="h-5 bg-purple-100 rounded-full w-full" />
+                  <div className="h-5 bg-purple-100 rounded-full w-11/12" />
+                  <div className="h-5 bg-purple-100 rounded-full w-full" />
+                  <div className="h-5 bg-purple-100 rounded-full w-4/5" />
+                  <div className="h-5 bg-purple-100 rounded-full w-full" />
+                  <div className="h-5 bg-purple-100 rounded-full w-3/4" />
+                  <div className="h-5 bg-purple-100 rounded-full w-full" />
+                  <div className="h-5 bg-purple-100 rounded-full w-5/6" />
+                </div>
+              </div>
+              {/* Skeleton choices */}
+              <div className="space-y-3 animate-pulse">
+                <div className="h-16 bg-amber-100 rounded-2xl w-full" />
+                <div className="h-16 bg-purple-100 rounded-2xl w-full" />
+              </div>
+            </motion.div>
+          ) : currentChapter ? (
             <motion.div
               key={currentChapter.id}
               initial={{ opacity: 0, x: -40 }}
@@ -177,7 +209,7 @@ export default function StoryPage() {
                     className="w-full py-5 px-6 rounded-2xl text-xl font-bold text-white shadow-lg disabled:opacity-60 text-right"
                     style={{ background: 'linear-gradient(135deg, #FFCF81, #ffb74d)', direction: 'rtl' }}
                   >
-                    {choosing ? '✨ יוצרים...' : `👉 ${currentChapter.option_a}`}
+                    {`👉 ${currentChapter.option_a}`}
                   </motion.button>
                   <motion.button
                     whileHover={{ scale: 1.02 }}
@@ -187,7 +219,7 @@ export default function StoryPage() {
                     className="w-full py-5 px-6 rounded-2xl text-xl font-bold text-white shadow-lg disabled:opacity-60 text-right"
                     style={{ background: 'linear-gradient(135deg, #B2A4FF, #9c88ff)', direction: 'rtl' }}
                   >
-                    {choosing ? '✨ יוצרים...' : `👉 ${currentChapter.option_b}`}
+                    {`👉 ${currentChapter.option_b}`}
                   </motion.button>
                 </div>
               )}
@@ -196,7 +228,7 @@ export default function StoryPage() {
                 <p className="text-center text-red-400 font-semibold mt-4">{error}</p>
               )}
             </motion.div>
-          )}
+          ) : null}
         </AnimatePresence>
 
         {/* Link to reader mode */}
