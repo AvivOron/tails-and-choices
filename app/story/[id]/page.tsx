@@ -18,6 +18,7 @@ export default function StoryPage() {
   const [loading, setLoading] = useState(true);
   const [choosing, setChoosing] = useState(false);
   const [error, setError] = useState('');
+  const [lastChoice, setLastChoice] = useState<string | null>(null);
 
   const currentChapter = chapters[chapters.length - 1];
 
@@ -49,6 +50,7 @@ export default function StoryPage() {
     if (choosing) return;
     setChoosing(true);
     setError('');
+    setLastChoice(choice);
     window.scrollTo(0, 0);
 
     try {
@@ -134,7 +136,7 @@ export default function StoryPage() {
       </div>
 
       {/* Chapter content */}
-      <div className={`flex-1 flex flex-col px-4 py-8 max-w-2xl mx-auto w-full ${!choosing ? 'items-center justify-center' : ''}`}>
+      <div className={`flex-1 flex flex-col px-4 py-8 max-w-2xl mx-auto w-full ${!choosing && !error ? 'items-center justify-center' : ''}`}>
         <AnimatePresence mode="wait">
           {choosing ? (
             <motion.div
@@ -204,6 +206,68 @@ export default function StoryPage() {
                 </motion.p>
               </div>
             </motion.div>
+          ) : error && lastChoice ? (
+            <motion.div
+              key="retry"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+              className="flex-1 flex flex-col items-center justify-center gap-8 w-full"
+            >
+              {/* Broken wand */}
+              <div className="relative w-48 h-48 flex items-center justify-center">
+                <motion.div
+                  animate={{ rotate: [0, -6, 6, -6, 0] }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                  className="text-7xl select-none"
+                >
+                  💫
+                </motion.div>
+                {[
+                  { angle: 30,  radius: 70, delay: 0,   size: '1.2rem', emoji: '⭐' },
+                  { angle: 150, radius: 68, delay: 0.5, size: '1rem',   emoji: '✦'  },
+                  { angle: 270, radius: 72, delay: 1,   size: '1.4rem', emoji: '⭐' },
+                ].map(({ angle, radius, delay, size, emoji }, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute select-none"
+                    style={{
+                      x: Math.cos((angle * Math.PI) / 180) * radius,
+                      y: Math.sin((angle * Math.PI) / 180) * radius,
+                      fontSize: size,
+                    }}
+                    animate={{ opacity: [0.3, 0.8, 0.3], scale: [0.8, 1.1, 0.8] }}
+                    transition={{ duration: 2, repeat: Infinity, delay, ease: 'easeInOut' }}
+                  >
+                    {emoji}
+                  </motion.div>
+                ))}
+                <motion.div
+                  className="absolute inset-0 rounded-full"
+                  style={{ background: 'radial-gradient(circle, rgba(255,180,180,0.2) 0%, transparent 70%)' }}
+                  animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.8, 0.4] }}
+                  transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+                />
+              </div>
+
+              <div className="text-center space-y-2" style={{ direction: 'rtl' }}>
+                <p className="text-lg font-bold" style={{ color: '#6b6b8a' }}>הקסם נתקע...</p>
+                <p className="text-sm" style={{ color: '#9b9bb0' }}>רוצים לנסות שוב?</p>
+              </div>
+
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleChoice(lastChoice)}
+                className="px-10 py-5 rounded-2xl text-xl font-bold text-white shadow-xl"
+                style={{ background: 'linear-gradient(135deg, #B2A4FF, #9c88ff)', direction: 'rtl' }}
+                animate={{ boxShadow: ['0 4px 24px rgba(178,164,255,0.3)', '0 4px 36px rgba(178,164,255,0.7)', '0 4px 24px rgba(178,164,255,0.3)'] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                ✨ נסו שוב
+              </motion.button>
+            </motion.div>
           ) : currentChapter ? (
             <motion.div
               key={currentChapter.id}
@@ -261,9 +325,6 @@ export default function StoryPage() {
                 </div>
               )}
 
-              {error && (
-                <p className="text-center text-red-400 font-semibold mt-4">{error}</p>
-              )}
             </motion.div>
           ) : null}
         </AnimatePresence>
