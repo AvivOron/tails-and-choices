@@ -9,15 +9,18 @@ async function paddleGet(path: string) {
   return res.json();
 }
 
-export async function hasActivePaddleSubscription(email: string): Promise<boolean> {
+export async function hasActivePaddleSubscription(_email: string): Promise<boolean> {
+  // Payments temporarily disabled
+  return false;
+
   // 1. Find customer by email
-  const customers = await paddleGet(`/customers?email=${encodeURIComponent(email)}`);
-  const customerId = customers?.data?.[0]?.id;
-  if (!customerId) return false;
+  // const customers = await paddleGet(`/customers?email=${encodeURIComponent(_email)}`);
+  // const customerId = customers?.data?.[0]?.id;
+  // if (!customerId) return false;
 
   // 2. Check subscriptions for that customer
-  const subs = await paddleGet(`/subscriptions?customer_id=${customerId}`);
-  return subs?.data?.some(
-    (s: { status: string }) => s.status === 'active' || s.status === 'past_due'
-  ) ?? false;
+  // const subs = await paddleGet(`/subscriptions?customer_id=${customerId}`);
+  // return subs?.data?.some(
+  //   (s: { status: string }) => s.status === 'active' || s.status === 'past_due'
+  // ) ?? false;
 }

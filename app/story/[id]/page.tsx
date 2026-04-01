@@ -345,8 +345,9 @@ export default function StoryPage() {
                     הגעתם ל-{reachedLimit} פרקים להיום!
                   </p>
                   <p className="text-sm mb-4" style={{ color: '#9b9bb0' }}>
-                    {isPro ? 'חזרו מחר להמשך ההרפתקה ✨' : 'שדרגו לפרקים נוספים, או חזרו מחר ✨'}
+                    חזרו מחר להמשך ההרפתקה ✨
                   </p>
+                  {/* Upgrade button — payments disabled
                   {!isPro && <button
                     onClick={async () => {
                       const res = await fetch('/tales-and-choices/api/paddle/customer');
@@ -364,6 +365,7 @@ export default function StoryPage() {
                   >
                     ✨ שדרגו למכסה יומית גבוהה יותר (30 פרקים ביום)
                   </button>}
+                  */}
                 </motion.div>
               )}
 
