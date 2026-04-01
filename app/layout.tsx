@@ -29,11 +29,13 @@ export const metadata: Metadata = {
     title: 'סיפורים ובחירות | Tales & Choices',
     description: 'אפליקציית סיפורים אינטראקטיביים בעברית לילדים קטנים. צרו סיפור ייחודי עם הגיבור שלכם ובחרו את המסע!',
     locale: 'he_IL',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'סיפורים ובחירות | Tales & Choices' }],
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: 'סיפורים ובחירות | Tales & Choices',
     description: 'אפליקציית סיפורים אינטראקטיביים בעברית לילדים קטנים.',
+    images: ['/opengraph-image'],
   },
   alternates: {
     canonical: baseUrl,
