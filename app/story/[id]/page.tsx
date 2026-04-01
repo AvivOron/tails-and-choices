@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter, useParams } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -18,7 +18,6 @@ export default function StoryPage() {
   const [loading, setLoading] = useState(true);
   const [choosing, setChoosing] = useState(false);
   const [error, setError] = useState('');
-  const pageTopRef = useRef<HTMLDivElement>(null);
 
   const currentChapter = chapters[chapters.length - 1];
 
@@ -50,7 +49,7 @@ export default function StoryPage() {
     if (choosing) return;
     setChoosing(true);
     setError('');
-    pageTopRef.current?.scrollIntoView({ behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 
     try {
       const res = await fetch(`/tales-and-choices/api/stories/${storyId}/chapters`, {
@@ -104,7 +103,6 @@ export default function StoryPage() {
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(135deg, #f5e6c8 0%, #e8dff5 100%)' }}>
-      <div ref={pageTopRef} />
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-4 border-b border-white/60 bg-white/40 backdrop-blur-sm">
         <button
@@ -136,35 +134,74 @@ export default function StoryPage() {
       </div>
 
       {/* Chapter content */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 max-w-2xl mx-auto w-full">
+      <div className={`flex-1 flex flex-col px-4 py-8 max-w-2xl mx-auto w-full ${!choosing ? 'items-center justify-center' : ''}`}>
         <AnimatePresence mode="wait">
           {choosing ? (
             <motion.div
-              key="skeleton"
+              key="magic"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="w-full"
+              transition={{ duration: 0.4 }}
+              className="flex-1 flex flex-col items-center justify-center gap-8 w-full"
             >
-              {/* Skeleton chapter text */}
-              <div className="bg-white rounded-3xl shadow-xl p-8 mb-6 relative">
-                <div className="absolute top-4 left-4 text-2xl opacity-30">📖</div>
-                <div className="space-y-3 animate-pulse">
-                  <div className="h-5 bg-purple-100 rounded-full w-full" />
-                  <div className="h-5 bg-purple-100 rounded-full w-11/12" />
-                  <div className="h-5 bg-purple-100 rounded-full w-full" />
-                  <div className="h-5 bg-purple-100 rounded-full w-4/5" />
-                  <div className="h-5 bg-purple-100 rounded-full w-full" />
-                  <div className="h-5 bg-purple-100 rounded-full w-3/4" />
-                  <div className="h-5 bg-purple-100 rounded-full w-full" />
-                  <div className="h-5 bg-purple-100 rounded-full w-5/6" />
-                </div>
+              {/* Floating sparkles */}
+              <div className="relative w-48 h-48 flex items-center justify-center">
+                {[
+                  { angle: 0,   radius: 72, delay: 0,    size: '1.6rem' },
+                  { angle: 60,  radius: 68, delay: 0.3,  size: '1.1rem' },
+                  { angle: 120, radius: 74, delay: 0.6,  size: '1.4rem' },
+                  { angle: 180, radius: 70, delay: 0.15, size: '1.2rem' },
+                  { angle: 240, radius: 66, delay: 0.45, size: '1.5rem' },
+                  { angle: 300, radius: 72, delay: 0.9,  size: '1rem'   },
+                ].map(({ angle, radius, delay, size }, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute"
+                    style={{
+                      x: Math.cos((angle * Math.PI) / 180) * radius,
+                      y: Math.sin((angle * Math.PI) / 180) * radius,
+                      fontSize: size,
+                    }}
+                    animate={{
+                      scale: [1, 1.4, 1],
+                      opacity: [0.6, 1, 0.6],
+                      rotate: [0, 20, -20, 0],
+                    }}
+                    transition={{ duration: 1.8, repeat: Infinity, delay, ease: 'easeInOut' }}
+                  >
+                    ✨
+                  </motion.div>
+                ))}
+
+                {/* Central magic orb */}
+                <motion.div
+                  animate={{ scale: [1, 1.12, 1], rotate: [0, 8, -8, 0] }}
+                  transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+                  className="text-7xl select-none"
+                >
+                  🪄
+                </motion.div>
+
+                {/* Glow ring */}
+                <motion.div
+                  className="absolute inset-0 rounded-full"
+                  style={{ background: 'radial-gradient(circle, rgba(178,164,255,0.25) 0%, transparent 70%)' }}
+                  animate={{ scale: [1, 1.3, 1], opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                />
               </div>
-              {/* Skeleton choices */}
-              <div className="space-y-3 animate-pulse">
-                <div className="h-16 bg-amber-100 rounded-2xl w-full" />
-                <div className="h-16 bg-purple-100 rounded-2xl w-full" />
+
+              {/* Animated text */}
+              <div className="text-center">
+                <motion.p
+                  className="text-xl font-bold"
+                  style={{ color: '#6b6b8a', direction: 'rtl' }}
+                  animate={{ opacity: [0.6, 1, 0.6] }}
+                  transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  יוצרים את הפרק הבא...
+                </motion.p>
               </div>
             </motion.div>
           ) : currentChapter ? (
@@ -232,7 +269,7 @@ export default function StoryPage() {
         </AnimatePresence>
 
         {/* Link to reader mode */}
-        {chapters.length > 1 && (
+        {!choosing && chapters.length > 1 && (
           <button
             onClick={() => router.push(`/story/${storyId}/read`)}
             className="mt-8 flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-xl transition-all hover:scale-105"
