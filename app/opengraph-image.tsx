@@ -46,10 +46,10 @@ export default function OGImage() {
         <div style={{ fontSize: 72, fontWeight: 800, color: '#2d2d2d', marginBottom: 16 }}>
           Tales &amp; Choices
         </div>
-        <div style={{ fontSize: 36, color: '#6b6b8a', marginBottom: 12 }}>
+        <div style={{ fontSize: 36, color: '#6b6b8a', marginBottom: 12, direction: 'rtl' }}>
           סיפורים אינטראקטיביים לילדים
         </div>
-        <div style={{ fontSize: 28, color: '#9b9bb0' }}>
+        <div style={{ fontSize: 28, color: '#9b9bb0', direction: 'rtl' }}>
           צרו סיפורים קסומים עם הגיבור שלכם
         </div>
       </div>
