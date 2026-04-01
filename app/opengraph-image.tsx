@@ -5,6 +5,10 @@ export const alt = 'סיפורים ובחירות | Tales & Choices';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
+function rtl(text: string) {
+  return text.split('').reverse().join('');
+}
+
 export default function OGImage() {
   return new ImageResponse(
     (
@@ -47,10 +51,10 @@ export default function OGImage() {
           Tales &amp; Choices
         </div>
         <div style={{ fontSize: 36, color: '#6b6b8a', marginBottom: 12 }}>
-          סיפורים אינטראקטיביים לילדים
+          {rtl('סיפורים אינטראקטיביים לילדים')}
         </div>
         <div style={{ fontSize: 28, color: '#9b9bb0' }}>
-          צרו סיפורים קסומים עם הגיבור שלכם
+          {rtl('צרו סיפורים קסומים עם הגיבור שלכם')}
         </div>
       </div>
     ),
