@@ -3,7 +3,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { createServiceClient } from '@/lib/supabase';
 import { generateChapter } from '@/lib/gemini';
-import { getDailyChapterCount, DAILY_CHAPTER_LIMIT } from '@/lib/rateLimit';
+import { getDailyChapterCount, DAILY_CHAPTER_LIMIT, DAILY_CHAPTER_LIMIT_PRO } from '@/lib/rateLimit';
+import { hasActivePaddleSubscription } from '@/lib/paddle';
 
 // POST /api/stories/[id]/chapters — generate next chapter based on a choice
 export async function POST(
@@ -20,10 +21,15 @@ export async function POST(
   const { choiceMade } = await req.json();
   const supabase = createServiceClient();
 
-  // Check daily chapter limit
-  const todayCount = await getDailyChapterCount(userId, supabase);
-  if (todayCount >= DAILY_CHAPTER_LIMIT) {
-    return NextResponse.json({ error: 'Daily chapter limit reached' }, { status: 429 });
+  // Check daily chapter limit (pro users get a higher limit)
+  const userEmail = session.user.email!;
+  const [todayCount, isPro] = await Promise.all([
+    getDailyChapterCount(userId, supabase),
+    hasActivePaddleSubscription(userEmail),
+  ]);
+  const limit = isPro ? DAILY_CHAPTER_LIMIT_PRO : DAILY_CHAPTER_LIMIT;
+  if (todayCount >= limit) {
+    return NextResponse.json({ error: 'Daily chapter limit reached', isPro, limit }, { status: 429 });
   }
 
   // Verify story ownership

@@ -6,6 +6,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Volume2, BookOpen, Library, Plus } from 'lucide-react';
 import type { Story, Chapter } from '@/types/database';
+import { usePaddle } from '@/components/PaddleProvider';
 
 export default function StoryPage() {
   const { status } = useSession();
@@ -22,6 +23,9 @@ export default function StoryPage() {
   const [chapterImages, setChapterImages] = useState<Record<string, string>>({});
   const generatingImagesRef = useRef<Set<string>>(new Set());
   const [limitReached, setLimitReached] = useState(false);
+  const [isPro, setIsPro] = useState(false);
+  const [reachedLimit, setReachedLimit] = useState(0);
+  const paddle = usePaddle();
 
   const currentChapter = chapters[chapters.length - 1];
 
@@ -105,6 +109,9 @@ export default function StoryPage() {
       });
 
       if (res.status === 429) {
+        const data = await res.json();
+        setIsPro(data.isPro ?? false);
+        setReachedLimit(data.limit ?? 0);
         setLimitReached(true);
         return;
       }
@@ -335,11 +342,28 @@ export default function StoryPage() {
                 >
                   <div className="text-4xl mb-3">🌙</div>
                   <p className="font-bold text-lg mb-1" style={{ color: '#6b6b8a' }}>
-                    הגעתם ל-15 פרקים להיום!
+                    הגעתם ל-{reachedLimit} פרקים להיום!
                   </p>
-                  <p className="text-sm" style={{ color: '#9b9bb0' }}>
-                    חזרו מחר להמשך ההרפתקה ✨
+                  <p className="text-sm mb-4" style={{ color: '#9b9bb0' }}>
+                    {isPro ? 'חזרו מחר להמשך ההרפתקה ✨' : 'שדרגו לפרקים נוספים, או חזרו מחר ✨'}
                   </p>
+                  {!isPro && <button
+                    onClick={async () => {
+                      const res = await fetch('/tales-and-choices/api/paddle/customer');
+                      const { customerId } = await res.json();
+                      paddle?.Checkout.open({
+                        items: [{ priceId: process.env.NEXT_PUBLIC_PADDLE_PRICE_ID!, quantity: 1 }],
+                        customer: { id: customerId },
+                        settings: {
+                          successUrl: window.location.href,
+                        },
+                      });
+                    }}
+                    className="px-6 py-3 rounded-2xl text-sm font-bold text-white shadow-md transition-all hover:scale-105"
+                    style={{ background: 'linear-gradient(135deg, #FFCF81, #ffb74d)' }}
+                  >
+                    ✨ שדרגו למכסה יומית גבוהה יותר (30 פרקים ביום)
+                  </button>}
                 </motion.div>
               )}
 

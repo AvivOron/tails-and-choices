@@ -1,6 +1,7 @@
 import { createServiceClient } from '@/lib/supabase';
 
-export const DAILY_CHAPTER_LIMIT = 15;
+export const DAILY_CHAPTER_LIMIT = 5;
+export const DAILY_CHAPTER_LIMIT_PRO = 30;
 
 export async function getDailyChapterCount(
   userId: string,

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Heebo } from 'next/font/google';
 import './globals.css';
 import SessionProvider from '@/components/SessionProvider';
+import PaddleProvider from '@/components/PaddleProvider';
 import { Analytics } from '@vercel/analytics/next';
 
 const heebo = Heebo({
@@ -51,7 +52,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="he" dir="rtl" className={`${heebo.variable} h-full`}>
       <body className="min-h-full flex flex-col font-[var(--font-heebo)]" style={{ fontFamily: 'var(--font-heebo), Arial, sans-serif' }}>
-        <SessionProvider>{children}</SessionProvider>
+        <PaddleProvider>
+          <SessionProvider>{children}</SessionProvider>
+        </PaddleProvider>
         <Analytics />
       </body>
     </html>
