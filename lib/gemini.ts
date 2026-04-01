@@ -90,17 +90,23 @@ Style: soft watercolor, bright and cheerful, suitable for children ages 3-5, no 
     responseModalities: ['TEXT', 'IMAGE'],
   };
 
-  const result = await model.generateContent({
-    contents: [{ role: 'user', parts: [{ text: prompt }] }],
-    generationConfig,
-  });
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const result = await model.generateContent({
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      generationConfig,
+    });
 
-  const parts = result.response.candidates?.[0]?.content?.parts ?? [];
-  for (const part of parts) {
-    if (part.inlineData) {
-      return `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+    const parts = result.response.candidates?.[0]?.content?.parts ?? [];
+    for (const part of parts) {
+      if (part.inlineData) {
+        return `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+      }
+    }
+
+    if (attempt < 3) {
+      await new Promise((r) => setTimeout(r, attempt * 1000));
     }
   }
 
-  throw new Error('No image in Gemini response');
+  throw new Error('No image in Gemini response after 3 attempts');
 }
