@@ -24,7 +24,7 @@ export async function generateChapter({
   rollingSummary: string;
   choiceMade?: string;
 }): Promise<GeminiChapterResponse> {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-lite' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
   const genderHebrew = heroGender === 'male' ? 'זכר' : 'נקבה';
   const companionsStr = companionNames.length > 0 ? companionNames.join(', ') : 'none';
