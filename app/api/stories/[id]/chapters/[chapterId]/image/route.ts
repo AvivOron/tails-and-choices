@@ -46,18 +46,22 @@ export async function POST(
     return NextResponse.json({ imageUrl: chapter.image_url });
   }
 
-  // Generate image
-  const imageUrl = await generateChapterImage({
-    heroName: story.hero_name,
-    setting: story.setting ?? 'forest',
-    rollingSummary: story.rolling_summary ?? '',
-  });
+  // Generate image — fail gracefully so story is never blocked
+  let imageUrl: string | null = null;
+  try {
+    imageUrl = await generateChapterImage({
+      heroName: story.hero_name,
+      setting: story.setting ?? 'forest',
+      rollingSummary: story.rolling_summary ?? '',
+    });
 
-  // Save to DB
-  await supabase
-    .from('chapters')
-    .update({ image_url: imageUrl })
-    .eq('id', chapterId);
+    await supabase
+      .from('chapters')
+      .update({ image_url: imageUrl })
+      .eq('id', chapterId);
+  } catch (err) {
+    console.error('Image generation failed:', err);
+  }
 
   return NextResponse.json({ imageUrl });
 }

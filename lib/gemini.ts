@@ -76,7 +76,7 @@ export async function generateChapterImage({
   setting: string;
   rollingSummary: string;
 }): Promise<string> {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-preview-image-generation' });
 
   const prompt = `Create a colorful, warm, child-friendly picture book illustration.
 Hero: ${heroName}
