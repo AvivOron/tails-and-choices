@@ -1,26 +1,14 @@
-'use client';
-
-import { signIn, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
 import { BookOpen, Sparkles, Wand2, Heart, Star } from 'lucide-react';
+import GoogleSignInButton from '@/components/GoogleSignInButton';
+import { authOptions } from '@/lib/auth';
 
-export default function HomePage() {
-  const { status } = useSession();
-  const router = useRouter();
+export default async function HomePage() {
+  const session = await getServerSession(authOptions);
 
-  useEffect(() => {
-    if (status === 'authenticated') {
-      router.push('/library');
-    }
-  }, [status, router]);
-
-  if (status === 'loading') {
-    return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #f5e6c8 0%, #e8dff5 100%)' }}>
-        <div className="text-4xl animate-bounce">✨</div>
-      </div>
-    );
+  if (session) {
+    redirect('/library');
   }
 
   return (
@@ -56,14 +44,13 @@ export default function HomePage() {
           AI-powered Hebrew interactive stories for kids aged 3–8
         </p>
 
-        <button
-          onClick={() => signIn('google')}
+        <GoogleSignInButton
           className="w-full py-4 px-8 rounded-2xl text-xl font-bold text-white shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 flex items-center justify-center gap-3 cursor-pointer"
           style={{ background: 'linear-gradient(135deg, #FFCF81, #ffb74d)' }}
         >
           <Sparkles className="w-6 h-6" />
           התחילו סיפור חדש
-        </button>
+        </GoogleSignInButton>
 
         <p className="mt-5 text-sm" style={{ color: '#aaaacc' }}>
           כניסה חינמית עם חשבון Google
@@ -142,14 +129,13 @@ export default function HomePage() {
           <p className="mb-6 text-sm" style={{ color: '#6b6b8a' }}>
             הצטרפו לאלפי משפחות שכבר יוצרות סיפורים קסומים בעברית
           </p>
-          <button
-            onClick={() => signIn('google')}
+          <GoogleSignInButton
             className="w-full py-4 px-8 rounded-2xl text-xl font-bold text-white shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 flex items-center justify-center gap-3 cursor-pointer"
             style={{ background: 'linear-gradient(135deg, #FFCF81, #ffb74d)' }}
           >
             <Sparkles className="w-6 h-6" />
             התחילו בחינם
-          </button>
+          </GoogleSignInButton>
         </div>
       </section>
 
